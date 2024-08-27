@@ -6,7 +6,8 @@ use App\Traits\GeneralTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+// use Tymon\JWTAuth\JWTAuth;
 
 class AdminController extends Controller
 {
@@ -45,5 +46,32 @@ class AdminController extends Controller
     // return $this->respondWithToken($token);
 }
 
+public function showProfile(Request $request)
+    {
+        // الحصول على المستخدم المعتمد من التوكن
+        $admin = JWTAuth::parseToken()->authenticate();
+        // $admin = auth()->guard($guard)->user();
+        // التحقق من وجود المستخدم
+        if (!$admin) {
+            return response()->json([
+                'status' => false,
+                'errNum' => 'E001',
+                'msg' => 'Admin not found'
+            ], 404);
+        }
+
+        // عرض بيانات الملف الشخصي
+        return response()->json([
+            'status' => true,
+            'errNum' => 'S000',
+            'msg' => 'تم بنجاح',
+            'admin' => $admin
+        ]);
+    }
+
+// public function logout(Request $request){
+//     auth()->guard('')->logout();
+//     return $this->returnSuccess('','');
+// }Abood@12345
 
 }

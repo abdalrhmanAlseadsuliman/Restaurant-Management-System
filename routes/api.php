@@ -22,4 +22,8 @@ use App\Http\Controllers\Admin\AdminController;
 
 Route::group(['middleware'=>'api',],function(){
    Route::post('login-admin', [AdminController::class,'login'] );
-}); 
+});
+
+Route::group(['middleware'=> 'auth.guard:admin-api',],function(){
+    Route::get('admin/profile', [AdminController::class,'showProfile'] );
+});
